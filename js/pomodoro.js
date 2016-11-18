@@ -1,10 +1,3 @@
-/* Modified from http://stackoverflow.com/a/17267684 */
-function hsl_col_perc(percent, start, end) {
-  var a = end * percent, color = a + start;
-  //Return a CSS HSL string
-  return 'hsl(' + color + ',100%,50%)';
-}
-
 /* Modified from http://stackoverflow.com/a/26296759 */
 function makeDoubleClick(doubleClickCallback, singleClickCallback) {
   var clicks = 0, timeout;
