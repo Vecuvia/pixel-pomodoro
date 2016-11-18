@@ -25,7 +25,7 @@ function makeDoubleClick(doubleClickCallback, singleClickCallback) {
   };
 }
 
-var TIME = 1 * 60, time = TIME, timer;
+var TIME = 25 * 60, time = TIME, timer;
 
 function update_timer () {
   var minutes = Math.floor(time / 60), seconds = time % 60;
