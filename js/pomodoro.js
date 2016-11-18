@@ -47,6 +47,16 @@ function tick () {
   }
 }
 
+document.querySelector("#help-button").addEventListener("click", function (event) {
+  document.querySelector("#help-text").style.display = "";
+  document.querySelector("#help-button").style.display = "none";
+});
+
+document.querySelector("#help-text").addEventListener("click", function (event) {
+  document.querySelector("#help-button").style.display = "";
+  document.querySelector("#help-text").style.display = "none";
+});
+
 document.querySelector("#pomodoro").addEventListener("click",
   makeDoubleClick(
     function double_click (event) {

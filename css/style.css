@@ -28,6 +28,13 @@ main {
   color: #000000;
 }
 
+#help-button, #help-text {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 footer {
   text-align: center;
 }
