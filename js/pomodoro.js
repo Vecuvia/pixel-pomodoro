@@ -18,7 +18,9 @@ function makeDoubleClick(doubleClickCallback, singleClickCallback) {
   };
 }
 
-var TIME = 25 * 60, time = TIME, timer;
+//var TIME = 25, SHORT_PAUSE = 5, LONG_PAUSE = 25, LONG_EACH = 2;
+var TIME = 25 * 60, SHORT_PAUSE = 5 * 60, LONG_PAUSE = 25 * 60, LONG_EACH = 4;
+var ctime = TIME, time = TIME, paused = false, timer, pomodoros = 0;
 
 function update_timer () {
   var minutes = Math.floor(time / 60), seconds = time % 60;
@@ -27,7 +29,7 @@ function update_timer () {
   document.querySelector("#seconds-tens").src = "img/" + Math.floor(seconds / 10) + ".png";
   document.querySelector("#seconds").src = "img/" + seconds % 10 + ".png";
   var pomodoro = document.querySelector("#pomodoro");
-  var filter = "hue-rotate(" + Math.floor((1 - time / TIME) * 120) + "deg)";
+  var filter = "hue-rotate(" + Math.floor(paused ? (time / ctime) * 120 : (1 - time / ctime) * 120) + "deg)";
   pomodoro.style["-webkit-filter"] = filter;
   pomodoro.style["filter"] = filter;
 }
@@ -37,8 +39,31 @@ function tick () {
   if (time-- == 0) {
     clearInterval(timer);
     timer = null;
+    if (Notification && Notification.permission === "granted") {
+      var notification = new Notification("Pixel pomodoro - Time's up", {
+        body: paused ? "It's time to go back to work." : "You did a pomodoro. Good job! Now take a short rest."
+      });
+    }
+    if (!paused) {
+      pomodoros++;
+      paused = true;
+      if (pomodoros % LONG_EACH === 0) {
+        ctime = LONG_PAUSE;
+        time = LONG_PAUSE;
+      } else {
+        ctime = SHORT_PAUSE;
+        time = SHORT_PAUSE;
+      }
+    } else {
+      paused = false;
+      ctime = TIME;
+      time = TIME;
+    }
+    update_timer();
   }
 }
+
+Notification && Notification.requestPermission();
 
 document.querySelector("#help-button").addEventListener("click", function (event) {
   document.querySelector("#help-text").style.display = "";
@@ -55,6 +80,7 @@ document.querySelector("#pomodoro").addEventListener("click",
     function double_click (event) {
       //On a double click, reset the timer, whether it's running or not
       time = TIME;
+      paused = false;
       update_timer();
     },
     function single_click (event) {
